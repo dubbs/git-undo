@@ -105,3 +105,9 @@ pre code .comment {
 .bar img {
   width: 60px;
 }
+
+/* line 81, ../sass/screen.scss */
+#disqus_thread {
+  max-width: 30em;
+  margin: 3em auto;
+}
