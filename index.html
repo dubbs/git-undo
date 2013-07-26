@@ -1,0 +1,68 @@
+<html>
+<head>
+<meta http-equiv="content-type" content="text/html; charset=utf-8" />
+<title>Git Undo</title>
+<link href='http://fonts.googleapis.com/css?family=Vollkorn|Inconsolata' rel='stylesheet' type='text/css'>
+<link href="public/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css" />
+<script src="http://ajax.googleapis.com/ajax/libs/jquery/1/jquery.min.js"></script>
+</head>
+<article>
+  <h1>Git Undo</h1>
+  <div class="bar">
+    <img src="public/images/swash.png">
+  </div>
+  <p class="tagline">Git doesn't make mistakes, you do. Here are some common mishaps and how to recover.</p>
+  <h2>Wrongful Commit</h2>
+  <p>A number of ways you can modify the last commit</p>
+  <pre><code data-language="shell"># change last commit message
+git commit --amend
+
+# undo last commit but leave files staged
+git reset --soft HEAD~1
+
+# undo to specific commit
+git reflog
+git reset HEAD@{1}
+
+# undo last local commit, not pushed yet
+git reset --hard HEAD~1
+
+# undo last public commit, already pushed
+git reflog
+git revert HEAD@{1}
+</code></pre>
+  <h2>Cleared Stash</h2>
+  <p>You just ran `git stash clear` but need your last stash</p>
+  <pre><code data-language="shell"># locate your stash SHA1
+gitk --all $( git fsck --no-reflog | awk '/dangling commit/ {print $3}' )
+git stash apply &lt;sha1&gt;
+</code></pre>
+  <h2>Rebase</h2>
+  <p>You want to undo a rebase?  Use the reflog</p>
+  <pre><code data-language="shell"># reset your HEAD to before the rebase
+git reflog
+git reset HEAD@{1}
+</code></pre>
+  <h2>Deleted Branch</h2>
+  <p>You've just deleted a branch, by mistake!</p>
+  <pre><code data-language="shell"># use reflog to find the SHA1 at the tip of your deleted branch
+git reflog
+# recreate the branch you lost
+git checkout -b &lt;branch&gt; &lt;sha&gt;
+</code></pre>
+  <h2>Staged Files</h2>
+  <p>Unstage a file to be committed</p>
+  <pre><code data-language="shell"># to unstage file but keep the changes
+git reset HEAD &lt;file&gt;
+# to unstage file and discard changes
+git checkout HEAD &lt;file&gt;
+</code></pre>
+
+</article>
+<script src="public/javascripts/jquery.fittext.js"></script>
+<script src="public/javascripts/rainbow.min.js"></script>
+<script src="public/javascripts/shell.js"></script>
+<script>
+jQuery("h1").fitText(0.7, {minFontSize: '72px', maxFontSize: '140px'});
+</script>
+</html>
